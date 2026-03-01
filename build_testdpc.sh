@@ -27,9 +27,9 @@ OUTPUT_DIR="${2:-$SCRIPT_DIR/output}"
 OUTPUT_DIR="$(cd "$(dirname "$OUTPUT_DIR")" 2>/dev/null && pwd)/$(basename "$OUTPUT_DIR")"
 WORK_DIR="$SCRIPT_DIR/build_workspace"
 
-# Print colored message
+# Print colored message (to stderr to not pollute captured output)
 print_msg() {
-    echo -e "${2}${1}${NC}"
+    echo -e "${2}${1}${NC}" >&2
 }
 
 # Print error and exit
