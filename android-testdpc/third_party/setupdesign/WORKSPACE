@@ -1,0 +1,2 @@
+# Workspace for vendored setupdesign
+workspace(name = "setupdesign")

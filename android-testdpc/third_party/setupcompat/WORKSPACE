@@ -1,0 +1,2 @@
+# Workspace for vendored setupcompat
+workspace(name = "setupcompat")
