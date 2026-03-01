@@ -23,6 +23,8 @@ NC='\033[0m' # No Color
 # Default values
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OUTPUT_DIR="${2:-$SCRIPT_DIR/output}"
+# Convert to absolute path
+OUTPUT_DIR="$(cd "$(dirname "$OUTPUT_DIR")" 2>/dev/null && pwd)/$(basename "$OUTPUT_DIR")"
 WORK_DIR="$SCRIPT_DIR/build_workspace"
 
 # Print colored message
