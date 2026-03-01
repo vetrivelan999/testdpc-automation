@@ -90,7 +90,11 @@ maven_install(
 http_archive(
     name = "setupdesign",
     build_file = "@//:setupdesign.BUILD",
-    url = "https://android.googlesource.com/platform/external/setupdesign/+archive/4634dac90e3c09a78c2fcdfcb16ab9cb16265527.tar.gz",
+    urls = [
+        "https://android.googlesource.com/platform/external/setupdesign/+archive/4634dac90e3c09a78c2fcdfcb16ab9cb16265527.tar.gz",
+        "https://github.com/aosp-mirror/platform_external_setupdesign/archive/4634dac90e3c09a78c2fcdfcb16ab9cb16265527.tar.gz",
+    ],
+    strip_prefix = "platform_external_setupdesign-4634dac90e3c09a78c2fcdfcb16ab9cb16265527",
 )
 
 http_archive(
@@ -101,5 +105,9 @@ http_archive(
         "ed -s main/java/com/google/android/setupcompat/logging/ScreenKey.java <<<$',s/Creator<>/Creator<ScreenKey>/g\nw'",
         "ed -s main/java/com/google/android/setupcompat/logging/SetupMetric.java <<<$',s/Creator<>/Creator<SetupMetric>/g\nw'",
     ],
-    url = "https://android.googlesource.com/platform/external/setupcompat/+archive/2ce41c8f4de550b5186233cec0a722dd0ffd9a84.tar.gz",
+    urls = [
+        "https://android.googlesource.com/platform/external/setupcompat/+archive/2ce41c8f4de550b5186233cec0a722dd0ffd9a84.tar.gz",
+        "https://github.com/aosp-mirror/platform_external_setupcompat/archive/2ce41c8f4de550b5186233cec0a722dd0ffd9a84.tar.gz",
+    ],
+    strip_prefix = "platform_external_setupcompat-2ce41c8f4de550b5186233cec0a722dd0ffd9a84",
 )
