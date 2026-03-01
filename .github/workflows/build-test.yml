@@ -56,7 +56,8 @@ jobs:
     - name: Test build script
       run: |
         chmod +x build_testdpc.sh
-        ./build_testdpc.sh ./android-testdpc ./output/
+        mkdir -p output
+        ./build_testdpc.sh ./android-testdpc output
         ls -la output/
         cat output/provisioning.json
     
