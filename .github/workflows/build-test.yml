@@ -1,0 +1,75 @@
+name: Build TestDPC
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Free up disk space
+      run: |
+        sudo rm -rf /usr/share/dotnet
+        sudo rm -rf /usr/local/lib/android/sdk/ndk
+        sudo rm -rf /opt/ghc
+        df -h
+    
+    - name: Setup environment
+      run: |
+        chmod +x setup_ubuntu.sh
+        sudo ./setup_ubuntu.sh
+    
+    - name: Load environment variables
+      run: |
+        source /etc/profile.d/java.sh
+        source /etc/profile.d/android.sh
+        echo "JAVA_HOME=$JAVA_HOME" >> $GITHUB_ENV
+        echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
+        echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
+        echo "$JAVA_HOME/bin" >> $GITHUB_PATH
+        echo "$ANDROID_HOME/cmdline-tools/latest/bin" >> $GITHUB_PATH
+    
+    - name: Build TestDPC APK
+      run: |
+        cd android-testdpc
+        bazel build testdpc --jobs=2
+    
+    - name: Verify APK exists
+      run: |
+        ls -la android-testdpc/bazel-bin/
+        if [ -f android-testdpc/bazel-bin/testdpc.apk ]; then
+          echo "✅ APK built successfully!"
+          echo "APK_SIZE=$(stat -c%s android-testdpc/bazel-bin/testdpc.apk)" >> $GITHUB_ENV
+        else
+          echo "❌ APK not found!"
+          exit 1
+        fi
+    
+    - name: Test build script
+      run: |
+        chmod +x build_testdpc.sh
+        ./build_testdpc.sh ./android-testdpc ./output/
+        ls -la output/
+        cat output/provisioning.json
+    
+    - name: Upload APK artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: testdpc-apk
+        path: output/testdpc.apk
+        retention-days: 7
+    
+    - name: Upload provisioning data
+      uses: actions/upload-artifact@v4
+      with:
+        name: provisioning-data
+        path: output/provisioning.json
+        retention-days: 7
