@@ -90,10 +90,10 @@ maven_install(
 # Vendored dependencies (downloaded from android.googlesource.com)
 local_repository(
     name = "setupdesign",
-    path = "//third_party/setupdesign",
+    path = "@//:third_party/setupdesign",
 )
 
 local_repository(
     name = "setupcompat",
-    path = "//third_party/setupcompat",
+    path = "@//:third_party/setupcompat",
 )
