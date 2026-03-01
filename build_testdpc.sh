@@ -116,11 +116,18 @@ build_apk() {
     # Build the testdpc target
     bazel build testdpc
     
-    # Locate the output APK
-    APK_PATH="$REPO_DIR/bazel-bin/testdpc.apk"
+    # Get the actual bazel-bin path (handles symlinks)
+    local bazel_bin=$(bazel info bazel-bin 2>/dev/null || echo "bazel-bin")
+    
+    # Locate the output APK using absolute path
+    APK_PATH="$(cd "$bazel_bin" && pwd)/testdpc.apk"
     
     if [ ! -f "$APK_PATH" ]; then
-        error_exit "Build failed: APK not found at bazel-bin/testdpc.apk"
+        # Try alternative location
+        APK_PATH="$(cd "$bazel_bin" && pwd)/testdpc_unsigned.apk"
+        if [ ! -f "$APK_PATH" ]; then
+            error_exit "Build failed: APK not found in $bazel_bin"
+        fi
     fi
     
     print_msg "Build successful!" "$GREEN"
